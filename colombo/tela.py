@@ -3,7 +3,8 @@ from tkinter import ttk
 import WebScraping
 from tkinter import *
 from connect import cursor, data_base
-
+import pandas as pd
+from openpyxl import Workbook
 
 
 def btn1_click():
@@ -12,6 +13,7 @@ def btn1_click():
     WebScraping.iniciar(produto_escolhido)
     lista = WebScraping.iniciar(produto_escolhido)
     carregar_dados(lista)
+    criar_tabela(produto_escolhido)
 
 def btn2_click():
     print("Botão 2 clicado")
@@ -19,6 +21,7 @@ def btn2_click():
     WebScraping.iniciar(produto_escolhido)
     lista = WebScraping.iniciar(produto_escolhido)
     carregar_dados(lista)
+    criar_tabela(produto_escolhido)
 
 
 def btn3_click():
@@ -27,7 +30,7 @@ def btn3_click():
     WebScraping.iniciar(produto_escolhido)
     lista = WebScraping.iniciar(produto_escolhido)
     carregar_dados(lista)
-
+    criar_tabela(produto_escolhido)
 
 def btn4_click():
     print("Botão 4 clicado")
@@ -35,6 +38,7 @@ def btn4_click():
     WebScraping.iniciar(produto_escolhido)
     lista = WebScraping.iniciar(produto_escolhido)
     carregar_dados(lista)
+    criar_tabela(produto_escolhido)
 
 def btn5_click():
     print("Botão 5 clicado")
@@ -42,6 +46,7 @@ def btn5_click():
     WebScraping.iniciar(produto_escolhido)
     lista = WebScraping.iniciar(produto_escolhido)
     carregar_dados(lista)
+    criar_tabela(produto_escolhido)
 
 def carregar_dados(lista):
     window = tk.Tk()
@@ -57,6 +62,29 @@ def carregar_dados(lista):
 
     for (modelo, valor) in dados:
         tv.insert("", "end", values=(modelo, valor))
+
+
+
+def criar_tabela(produto_escolhido):
+    dados = WebScraping.iniciar(produto_escolhido)
+
+    dados_com_cabecalho = [["Marca: " + produto_escolhido, "Preço"]] + dados
+
+    df = pd.DataFrame(dados_com_cabecalho[1:], columns=dados_com_cabecalho[0])
+
+    arquivo_excel = "dados.xlsx"
+    writer = pd.ExcelWriter(arquivo_excel, engine='openpyxl')
+    df.to_excel(writer, index=False, sheet_name='Sheet1')
+
+    workbook = writer.book
+    worksheet = writer.sheets['Sheet1']
+    for column_cells in worksheet.columns:
+        length = max(len(str(cell.value)) for cell in column_cells)
+        worksheet.column_dimensions[column_cells[0].column_letter].width = length + 2
+
+    writer._save()
+
+    print("Tabela exportada para o arquivo:", arquivo_excel)
 
 
 
