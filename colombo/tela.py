@@ -5,6 +5,7 @@ from tkinter import *
 from connect import cursor, data_base
 import pandas as pd
 from openpyxl import Workbook
+import conversor
 
 
 def btn1_click():
@@ -85,6 +86,8 @@ def criar_tabela(produto_escolhido):
     writer._save()
 
     print("Tabela exportada para o arquivo:", arquivo_excel)
+
+    conversor.converter()
 
 
 
